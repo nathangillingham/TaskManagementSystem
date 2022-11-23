@@ -14,6 +14,7 @@ using ADOX;
 using System.Drawing.Text;
 using System.Data.SqlTypes;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography;
 
 
 namespace NEADatabase
@@ -29,9 +30,6 @@ namespace NEADatabase
 
         private void LoadTasks()
         {
-            // Retrieve all records from the students table
-            /* string sSqlString = $"SELECT * FROM TaskID WHERE UserID='{username}' ";
-             ExecuteSql(sSqlString);*/
 
             string sSqlString2 = $"SELECT TaskID FROM Task_Groups INNER JOIN User_Groups ON Task_Groups.GroupID = User_Groups.GroupID WHERE UserID={UserID}";
             var reader = new Form1().ExecuteQuerySql(sSqlString2);
@@ -44,19 +42,61 @@ namespace NEADatabase
                 var reader2 = new Form1().ExecuteQuerySql(sSqlstring);
 
                 List<int> TasksCompleted = new List<int>();
+                List<int> TasksDisplayed = new List<int>();
 
                 while (reader2.Read())
                 {
                     TasksCompleted.Add(Convert.ToInt32(reader2[0]));
+                    TasksDisplayed.Add(TaskID);
                 }
 
                 if (!TasksCompleted.Contains(TaskID))
                 {
-                    string sSqlString3 = $"Select * FROM TaskID WHERE TaskID={TaskID}";
+                    TasksDisplayed.Add(TaskID);
+                    string sSqlString3 = $"Select * FROM TaskID WHERE TaskID={TaskID};";
                     ExecuteSql(sSqlString3);
                 }
 
 
+                string sSqlString4 = $"SELECT TaskID FROM HasTaskID WHERE UserID={UserID}";
+                var reader3 = new Form1().ExecuteQuerySql(sSqlString4);
+                while (reader3.Read())
+                {
+                    int IndividualTaskID = int.Parse(reader3[0].ToString());
+
+                    if (!TasksCompleted.Contains(IndividualTaskID) && !TasksDisplayed.Contains(IndividualTaskID))
+                    {
+                        TasksDisplayed.Add(IndividualTaskID);
+                        string sSqlString3 = $"Select * FROM TaskID WHERE TaskID={IndividualTaskID};";
+                        ExecuteSql(sSqlString3);
+                    }
+                }
+            }
+            if(!reader.Read()) 
+            {
+                string sSqlString5 = $"SELECT TaskID FROM HasTaskID WHERE UserID={UserID}";
+                var reader4 = new Form1().ExecuteQuerySql(sSqlString5);
+                while (reader4.Read())
+                {
+                    int IndividualTaskID = int.Parse(reader4[0].ToString());
+
+                    string sSqlstring = $"SELECT TaskID FROM Task_Completed WHERE EXISTS (SELECT TaskID FROM Task_Completed WHERE UserID={this.UserID} AND TaskID={IndividualTaskID})";
+                    var reader2 = new Form1().ExecuteQuerySql(sSqlstring);
+
+                    List<int> TasksCompleted = new List<int>();
+
+                    while (reader2.Read())
+                    {
+                        TasksCompleted.Add(Convert.ToInt32(reader2[0]));
+                    }
+
+                    if (!TasksCompleted.Contains(IndividualTaskID))
+                    {
+                        string sSqlString3 = $"Select * FROM TaskID WHERE TaskID={IndividualTaskID};";
+                        ExecuteSql(sSqlString3);
+                    }
+
+                }
             }
 
         }
@@ -64,13 +104,15 @@ namespace NEADatabase
         private void SetupGrid()
         {
             // Define number of columns and set headers
-            dgvTasks.ColumnCount = 5;
+            dgvTasks.ColumnCount = 6;
             dgvTasks.Columns[0].Name = "TaskID";
             dgvTasks.Columns[1].Name = "Title";
             dgvTasks.Columns[2].Name = "Date Due";
-            dgvTasks.Columns[3].Name = "Priority";
-            dgvTasks.Columns[4].Name = "Description";
+            dgvTasks.Columns[3].Name = "Date Set";
+            dgvTasks.Columns[4].Name = "Priority";
+            dgvTasks.Columns[5].Name = "Description";
             dgvTasks.Columns[2].DefaultCellStyle.Format = "dd/MM/yyyy";
+            dgvTasks.Columns[3].DefaultCellStyle.Format = "dd/MM/yyyy";
         }
 
         private void DisplayData(DataTable _dt)
@@ -87,8 +129,10 @@ namespace NEADatabase
                 dgvTasks.Rows[n].Cells[1].Value = _dt.Rows[i][1];
                 dgvTasks.Rows[n].Cells[2].Value = (string)_dt.Rows[i][4].ToString();
                 dgvTasks.Rows[n].Cells[2].Value = Convert.ToDateTime((string)_dt.Rows[i][4].ToString()).ToString("d");
-                dgvTasks.Rows[n].Cells[3].Value = String.IsNullOrEmpty((string)_dt.Rows[i][4].ToString()) ? "" : _dt.Rows[i][2];
-                dgvTasks.Rows[n].Cells[4].Value = String.IsNullOrEmpty((string)_dt.Rows[i][5].ToString()) ? "" : _dt.Rows[i][3];
+                dgvTasks.Rows[n].Cells[3].Value = (string)_dt.Rows[i][5].ToString();
+                dgvTasks.Rows[n].Cells[3].Value = Convert.ToDateTime((string)_dt.Rows[i][5].ToString()).ToString("d");
+                dgvTasks.Rows[n].Cells[4].Value = String.IsNullOrEmpty((string)_dt.Rows[i][4].ToString()) ? "" : _dt.Rows[i][2];
+                dgvTasks.Rows[n].Cells[5].Value = String.IsNullOrEmpty((string)_dt.Rows[i][5].ToString()) ? "" : _dt.Rows[i][3];
                 
 
             }
@@ -167,34 +211,32 @@ namespace NEADatabase
 
         private void rdoDate_CheckedChanged(object sender, EventArgs e)
         {
-            string sSqlString = $"SELECT * FROM TaskID WHERE UserID='{username}' ORDER BY DateDue";
-            ExecuteSql(sSqlString);
+
+            dgvTasks.Sort(dgvTasks.Columns[2], ListSortDirection.Ascending);
         }
 
         private void rdoPriority_CheckedChanged(object sender, EventArgs e)
         {
-            string sSqlString = $"SELECT * FROM TaskID WHERE UserID='{username}' ORDER BY Priority DESC";
-            ExecuteSql(sSqlString);
-
+            dgvTasks.Sort(dgvTasks.Columns[4], ListSortDirection.Descending);
         }
 
         private void btnSetTask_Click(object sender, EventArgs e)
         {
-            var AddTask = new AddTask();
+            var AddTask = new AddTask(UserID);
             AddTask.Show();
         }
 
         private void rdoDateSet_CheckedChanged(object sender, EventArgs e)
         {
-            string sSqlString = $"SELECT * FROM TaskID WHERE UserID='{username}' ORDER BY DateSet DESC";
-            ExecuteSql(sSqlString);
+
+            dgvTasks.Sort(dgvTasks.Columns[3], ListSortDirection.Descending);
         }
 
         private void btnCreateGroup_Click(object sender, EventArgs e)
         {
 
 
-            var CreateGroup = new CreateGroup(this.username);
+            var CreateGroup = new CreateGroup(UserID);
             CreateGroup.Show();
             Console.WriteLine(this.username);
         }
@@ -212,6 +254,10 @@ namespace NEADatabase
             string _sSqlString = "INSERT INTO Task_Completed(TaskID, UserID) " + "Values('" + CompletedTaskID + "', '" + UserID + "')";
 
             ExecuteSql(_sSqlString);
+
+            dgvTasks.Rows.Clear();
+
+            LoadTasks();
 
         }
 

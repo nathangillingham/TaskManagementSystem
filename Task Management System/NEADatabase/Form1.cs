@@ -107,7 +107,7 @@ namespace NEADatabase
             string _sSqlString;
             string _sSqlString2;
             string _sSqlString3;
-            //string _sSqlString4;
+            string _sSqlString4;
             string _sSqlString5;
             string _sSqlString6;
             string _sSqlString7;
@@ -135,22 +135,22 @@ namespace NEADatabase
             _sSqlString3 = "CREATE TABLE GroupID("
                                             + "GroupID INT IDENTITY(1,1),"
                                             + "GroupName CHAR(30),"
-                                            + "Owner CHAR(30),"
-                                            + "PRIMARY KEY(GroupID)"
+                                            + "OwnerID INT,"
+                                            + "PRIMARY KEY(GroupID),"
+                                            + "CONSTRAINT OwnerID FOREIGN KEY (OwnerID) REFERENCES UserID (UserID)"
                                             + ")";
 
             ExecuteSql(_sSqlString3)
 ;
 
-           /* _sSqlString4 = "CREATE TABLE HasTaskID("
-                                            + "HasTaskID INT IDENTITY(1,1),"
+            _sSqlString4 = "CREATE TABLE HasTaskID("
                                             + "UserID INT,"
                                             + "TaskID INT,"
-                                            + "PRIMARY KEY(HasTaskID),"
-                                            + "CONSTRAINT UserID FOREIGN KEY (UserID) REFERENCES UserID (UserID),"
-                                            + "CONSTRAINT TaskID FOREIGN KEY (TaskID) REFERENCES TaskID (TaskID)"
+                                            + "CONSTRAINT FKUser FOREIGN KEY (UserID) REFERENCES UserID (UserID),"
+                                            + "CONSTRAINT FKTask FOREIGN KEY (TaskID) REFERENCES TaskID (TaskID),"
+                                            + "PRIMARY KEY(UserID,TaskID)"
                                             + ")";
-            ExecuteSql(_sSqlString4);*/
+            ExecuteSql(_sSqlString4);
 
             _sSqlString5 = "CREATE TABLE User_Groups("
                                             + "GroupID INT,"

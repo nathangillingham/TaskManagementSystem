@@ -21,11 +21,11 @@ namespace NEADatabase
     {
         public string USER;
         public string CONNECTION_STRING;
-        public string currentUsername;
+        public int UserID;
 
-        public CreateGroup(string currentUsername)
+        public CreateGroup(int UserID)
         {
-            this.currentUsername = currentUsername;
+            this.UserID = UserID;
 
             InitializeComponent();
 
@@ -90,7 +90,7 @@ namespace NEADatabase
         {
             string sName = txtGroupName.Text;
 
-            string _sSqlString = "INSERT INTO GroupID(GroupName, Owner) " + $"Values('{sName}', '{this.currentUsername}')";
+            string _sSqlString = "INSERT INTO GroupID(GroupName, OwnerID) " + $"Values('{sName}', '{this.UserID}')";
 
             ExecuteSql(_sSqlString);
 
@@ -130,6 +130,11 @@ namespace NEADatabase
         }
 
         private void txtMembers_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void CreateGroup_Load(object sender, EventArgs e)
         {
 
         }

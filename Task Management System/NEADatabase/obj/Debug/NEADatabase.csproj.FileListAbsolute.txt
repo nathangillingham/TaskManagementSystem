@@ -85,3 +85,41 @@ D:\nathan project\NEADatabase\obj\Debug\NEADatabase.csproj.GenerateResource.cach
 D:\nathan project\NEADatabase\obj\Debug\NEADatabase.csproj.CoreCompileInputs.cache
 D:\nathan project\NEADatabase\obj\Debug\NEADatabase.exe
 D:\nathan project\NEADatabase\obj\Debug\NEADatabase.pdb
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\bin\Debug\NEADatabase.exe.config
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\bin\Debug\NEADatabase.exe
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\bin\Debug\NEADatabase.pdb
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\bin\Debug\Interop.ADOX.dll
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.AssemblyReference.cache
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.SuggestedBindingRedirects.cache
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\Interop.ADOX.dll
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.ResolveComReference.cache
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.Account.resources
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.AddTask.resources
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.AddUser.resources
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.CreateGroup.resources
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.Form1.resources
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.Login.resources
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.Properties.Resources.resources
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.GenerateResource.cache
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.CoreCompileInputs.cache
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.exe
+F:\TaskManagementSystem-main\Task Management System\NEADatabase\obj\Debug\NEADatabase.pdb
+D:\Task Management System\NEADatabase\bin\Debug\NEADatabase.exe.config
+D:\Task Management System\NEADatabase\bin\Debug\NEADatabase.exe
+D:\Task Management System\NEADatabase\bin\Debug\NEADatabase.pdb
+D:\Task Management System\NEADatabase\bin\Debug\Interop.ADOX.dll
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.AssemblyReference.cache
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.SuggestedBindingRedirects.cache
+D:\Task Management System\NEADatabase\obj\Debug\Interop.ADOX.dll
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.ResolveComReference.cache
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.Account.resources
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.AddTask.resources
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.AddUser.resources
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.CreateGroup.resources
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.Form1.resources
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.Login.resources
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.Properties.Resources.resources
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.GenerateResource.cache
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.csproj.CoreCompileInputs.cache
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.exe
+D:\Task Management System\NEADatabase\obj\Debug\NEADatabase.pdb

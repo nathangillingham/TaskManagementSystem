@@ -104,6 +104,7 @@
             this.Controls.Add(this.grpCreateGroup);
             this.Name = "CreateGroup";
             this.Text = "CreateGroup";
+            this.Load += new System.EventHandler(this.CreateGroup_Load);
             this.grpCreateGroup.ResumeLayout(false);
             this.grpCreateGroup.PerformLayout();
             this.ResumeLayout(false);
