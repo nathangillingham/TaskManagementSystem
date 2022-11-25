@@ -27,77 +27,114 @@ namespace NEADatabase
         public string username;
         public int UserID;
 
-
-        private void LoadTasks()
+        private List<int> TasksDone()
         {
+            string sSqlstring = $"SELECT TaskID FROM Task_Completed WHERE EXISTS (SELECT TaskID FROM Task_Completed WHERE UserID={this.UserID})";
+            var reader = new Form1().ExecuteQuerySql(sSqlstring);
 
-            string sSqlString2 = $"SELECT TaskID FROM Task_Groups INNER JOIN User_Groups ON Task_Groups.GroupID = User_Groups.GroupID WHERE UserID={UserID}";
-            var reader = new Form1().ExecuteQuerySql(sSqlString2);
+            List<int> TasksCompleted = new List<int>();
 
             while (reader.Read())
             {
-                int TaskID = int.Parse(reader[0].ToString());
-
-                string sSqlstring = $"SELECT TaskID FROM Task_Completed WHERE EXISTS (SELECT TaskID FROM Task_Completed WHERE UserID={this.UserID} AND TaskID={TaskID})";
-                var reader2 = new Form1().ExecuteQuerySql(sSqlstring);
-
-                List<int> TasksCompleted = new List<int>();
-                List<int> TasksDisplayed = new List<int>();
-
-                while (reader2.Read())
-                {
-                    TasksCompleted.Add(Convert.ToInt32(reader2[0]));
-                    TasksDisplayed.Add(TaskID);
-                }
-
-                if (!TasksCompleted.Contains(TaskID))
-                {
-                    TasksDisplayed.Add(TaskID);
-                    string sSqlString3 = $"Select * FROM TaskID WHERE TaskID={TaskID};";
-                    ExecuteSql(sSqlString3);
-                }
-
-
-                string sSqlString4 = $"SELECT TaskID FROM HasTaskID WHERE UserID={UserID}";
-                var reader3 = new Form1().ExecuteQuerySql(sSqlString4);
-                while (reader3.Read())
-                {
-                    int IndividualTaskID = int.Parse(reader3[0].ToString());
-
-                    if (!TasksCompleted.Contains(IndividualTaskID) && !TasksDisplayed.Contains(IndividualTaskID))
-                    {
-                        TasksDisplayed.Add(IndividualTaskID);
-                        string sSqlString3 = $"Select * FROM TaskID WHERE TaskID={IndividualTaskID};";
-                        ExecuteSql(sSqlString3);
-                    }
-                }
+                TasksCompleted.Add(Convert.ToInt32(reader[0]));
+                Console.WriteLine("completed task ");
+                Console.WriteLine(reader[0].ToString());
             }
-            if(!reader.Read()) 
+
+            return TasksCompleted;
+        } 
+
+        private bool IsTaskCompleted(int TaskID)
+        {
+            List<int> TasksCompleted = new List<int>();
+            TasksCompleted = TasksDone();
+            if (TasksCompleted.Contains(TaskID))
             {
-                string sSqlString5 = $"SELECT TaskID FROM HasTaskID WHERE UserID={UserID}";
-                var reader4 = new Form1().ExecuteQuerySql(sSqlString5);
-                while (reader4.Read())
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        private void DisplayTask(int TaskID)
+        {
+            string sSqlString = $"Select * FROM TaskID WHERE TaskID={TaskID};";
+            ExecuteSql(sSqlString);
+        }
+
+        private List<int> PersonalTasks()
+        {
+            string sSqlstring = $"SELECT TaskID FROM HasTaskID WHERE UserID={UserID}";
+            var reader = new Form1().ExecuteQuerySql(sSqlstring);
+
+            List<int> TempIndividualTasks = new List<int>();
+
+            while (reader.Read())
+            {
+                TempIndividualTasks.Add(Convert.ToInt32(reader[0]));
+                Console.WriteLine("IndividualTasks ");
+                Console.WriteLine(reader[0].ToString());
+            }
+
+            List<int> IndividualTasks = new List<int>();
+            List<int> GroupTasks = new List<int>();
+            GroupTasks = TasksFromGroups();
+
+            foreach (int Task in TempIndividualTasks)
+            {
+                if (!GroupTasks.Contains(Task))
                 {
-                    int IndividualTaskID = int.Parse(reader4[0].ToString());
-
-                    string sSqlstring = $"SELECT TaskID FROM Task_Completed WHERE EXISTS (SELECT TaskID FROM Task_Completed WHERE UserID={this.UserID} AND TaskID={IndividualTaskID})";
-                    var reader2 = new Form1().ExecuteQuerySql(sSqlstring);
-
-                    List<int> TasksCompleted = new List<int>();
-
-                    while (reader2.Read())
-                    {
-                        TasksCompleted.Add(Convert.ToInt32(reader2[0]));
-                    }
-
-                    if (!TasksCompleted.Contains(IndividualTaskID))
-                    {
-                        string sSqlString3 = $"Select * FROM TaskID WHERE TaskID={IndividualTaskID};";
-                        ExecuteSql(sSqlString3);
-                    }
-
+                    IndividualTasks.Add(Task);
                 }
             }
+
+            return IndividualTasks;
+        }
+
+        private List<int> TasksFromGroups()
+        {
+            string sSqlString = $"SELECT TaskID FROM Task_Groups INNER JOIN User_Groups ON Task_Groups.GroupID = User_Groups.GroupID WHERE UserID={UserID}";
+            var reader = new Form1().ExecuteQuerySql(sSqlString);
+
+            List<int> GroupTasks = new List<int>();
+
+            while (reader.Read())
+            {
+                GroupTasks.Add(Convert.ToInt32(reader[0]));
+                Console.WriteLine("GroupTasks ");
+                Console.WriteLine(reader[0].ToString());
+            }
+
+            return GroupTasks;
+
+        }
+        private void LoadTasks()
+        {
+            List<int> GroupTasks = new List<int>();
+            GroupTasks = TasksFromGroups();
+
+            List<int> IndividualTasks = new List<int>();
+            IndividualTasks = PersonalTasks();
+
+            foreach (int GroupTask in GroupTasks)
+            {
+                if (!IsTaskCompleted(GroupTask))
+                {
+                    DisplayTask(GroupTask);
+                }
+            }
+
+            foreach (int IndividualTask in IndividualTasks)
+            {
+                if (!IsTaskCompleted(IndividualTask))
+                {
+                    DisplayTask(IndividualTask);
+                }
+            }
+
+
 
         }
 
