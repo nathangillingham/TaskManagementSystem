@@ -35,14 +35,14 @@ namespace NEADatabase
         {
             string _sSqlString = $"SELECT GroupID FROM GroupID WHERE GroupName='{GroupName}'";
             var reader = Query.ExecuteSqlReturn(_sSqlString);
-            int GroupID = 0;
-
-            while(reader.Read())
+            if(reader.Read())
             {
-                GroupID = (int)reader[0];
+                return (int)reader[0];
             }
-
-            return GroupID;
+            else
+            {
+                return 0;
+            }
 
         }
 

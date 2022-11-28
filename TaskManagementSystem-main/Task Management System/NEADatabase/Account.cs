@@ -23,11 +23,10 @@ namespace NEADatabase
     {
 
         public string USER;
-        public string CONNECTION_STRING;
+        public string CONNECTION_STRING= @"Provider=Microsoft Jet 4.0 OLE DB Provider; Data Source = UserDatabase.mdb;";
         public string username;
         public int UserID;
         SQL Query = new SQL();
-
 
         public void ExecuteSqlDisplay(String sSqlString)
         {
@@ -65,8 +64,6 @@ namespace NEADatabase
             while (reader.Read())
             {
                 TasksCompleted.Add(Convert.ToInt32(reader[0]));
-                Console.WriteLine("completed task ");
-                Console.WriteLine(reader[0].ToString());
             }
 
             return TasksCompleted;
@@ -102,8 +99,6 @@ namespace NEADatabase
             while (reader.Read())
             {
                 TempIndividualTasks.Add(Convert.ToInt32(reader[0]));
-                Console.WriteLine("IndividualTasks ");
-                Console.WriteLine(reader[0].ToString());
             }
 
             List<int> IndividualTasks = new List<int>();
@@ -131,8 +126,6 @@ namespace NEADatabase
             while (reader.Read())
             {
                 GroupTasks.Add(Convert.ToInt32(reader[0]));
-                Console.WriteLine("GroupTasks ");
-                Console.WriteLine(reader[0].ToString());
             }
 
             return GroupTasks;
@@ -203,6 +196,7 @@ namespace NEADatabase
         public Account(string username)
         {
             InitializeComponent();
+            this.username = username;
             this.UserID = GetUserID();
         }
 
@@ -210,13 +204,15 @@ namespace NEADatabase
         {
             string _sSqlString = $"SELECT UserID FROM UserID WHERE Name='{this.username}'";
             var reader = Query.ExecuteSqlReturn(_sSqlString);
-            int UserID = 0;
-            while (reader.Read())
+            if(reader.Read())
             {
-                UserID = (int)reader[0];
+                int ID = (int)reader[0];
+                return ID;  
             }
-
-            return UserID;
+            else
+            {
+                return 0;
+            }
         }
 
         private void Account_Load(object sender, EventArgs e)
@@ -236,7 +232,7 @@ namespace NEADatabase
 
         private void rdoPriority_CheckedChanged(object sender, EventArgs e)
         {
-            dgvTasks.Sort(dgvTasks.Columns[4], ListSortDirection.Descending);
+            dgvTasks.Sort(dgvTasks.Columns[4], ListSortDirection.Ascending);
         }
 
         private void btnSetTask_Click(object sender, EventArgs e)
@@ -259,21 +255,54 @@ namespace NEADatabase
             Console.WriteLine(this.username);
         }
 
+        private bool HasBeenSet(int TaskID)
+        {
+            List<int> GroupTasks = new List<int>();
+            List<int> IndividualTasks = new List<int>();
+
+            GroupTasks = TasksFromGroups();
+            IndividualTasks = PersonalTasks();
+
+            if((GroupTasks.Contains(TaskID)) || (IndividualTasks.Contains(TaskID)))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+        private void CompleteTask()
+        {
+            try
+            {
+                int CompletedTaskID = Convert.ToInt32(txtCmpltdTaskID.Text);
+
+                if (HasBeenSet(CompletedTaskID) == true)
+                {
+                    string _sSqlString = "INSERT INTO Task_Completed(TaskID, UserID) " + "Values('" + CompletedTaskID + "', '" + UserID + "')";
+
+                    Query.ExecuteSql(_sSqlString);
+
+                    MessageBox.Show("Task Completed!");
+
+                    dgvTasks.Rows.Clear();
+
+                    LoadTasks();
+                }
+                else
+                {
+                    MessageBox.Show("You haven't been set this task!");
+                }
+            }
+            catch
+            {
+                MessageBox.Show("Error!");
+            }
+        }
         private void btnCmpltTask_Click(object sender, EventArgs e)
         {
-
-            int CompletedTaskID = Convert.ToInt32(txtCmpltdTaskID.Text);
-
-            string _sSqlString = "INSERT INTO Task_Completed(TaskID, UserID) " + "Values('" + CompletedTaskID + "', '" + UserID + "')";
-
-            Query.ExecuteSql(_sSqlString);
-
-            MessageBox.Show("Task Completed!");
-
-            dgvTasks.Rows.Clear();
-
-            LoadTasks();
-
+            CompleteTask();
         }
 
         private void btnClose_Click(object sender, EventArgs e)

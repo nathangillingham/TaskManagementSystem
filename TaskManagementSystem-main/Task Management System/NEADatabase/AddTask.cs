@@ -171,13 +171,15 @@ namespace NEADatabase
         {
             string _sSqlString = $"SELECT Heirarchy FROM UserID WHERE UserID={UserID}";
             var reader = Query.ExecuteSqlReturn(_sSqlString);
-            int Hierarchy = 0;
-            while (reader.Read())
+            if(reader.Read())
             {
-                Hierarchy = (int)reader[0];
+                return int.Parse(reader[0].ToString());
+            }
+            else
+            {
+                return 0;
             }
 
-            return Hierarchy;
         }
 
         private bool CanSetTask(int UserID, int TargetID)
@@ -185,7 +187,7 @@ namespace NEADatabase
             int UserHierarchy = GetHierarchy(UserID);
             int TargetHierarchy = GetHierarchy(TargetID);
 
-            if (UserHierarchy != 0 && TargetHierarchy != 0)
+            if ((UserHierarchy != 0) && (TargetHierarchy != 0))
             {
                 if (UserHierarchy <= TargetHierarchy)
                 {
@@ -221,7 +223,6 @@ namespace NEADatabase
             string Users = txtUser.Text;
             string[] UsersArray = Users.Split(',');
             int TaskID = GetTaskID(txtTitle.Text);
-
             if(ValidRecord(TaskID))
             {
                 foreach (string User in UsersArray)
@@ -230,8 +231,7 @@ namespace NEADatabase
                     {
                         User.Trim();
                         int TargetID = Convert.ToInt32(User);
-
-                        if(CanSetTask(UserID, TargetID))
+                        if(CanSetTask(UserID,TargetID))
                         {
                             AddTaskUser(TargetID, TaskID);
                         }
