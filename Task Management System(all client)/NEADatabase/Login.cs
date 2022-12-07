@@ -52,7 +52,7 @@ namespace NEADatabase
         {
             string Username = UsernameText.Text;
             string Password = Encryptor.Hash(PasswordText.Text);
-            string Hash = GetHash(Password); 
+            string Hash = GetHash(Username); 
 
             if ((Hash == Password) && (Hash != "null"))
             {

@@ -27,6 +27,22 @@ namespace NEADatabase
             Application.SetCompatibleTextRenderingDefault(false);
             Application.Run(new Form1());
 
+            /*            List<int> list = new List<int>();
+                        list.Add(1);
+                        list.Add(3);
+                        list.Add(2);
+                        list.Add(1);
+                        list.Add(4);
+                        list.Add(6);
+
+                        DateDueSort quickSort = new DateDueSort();
+                        List<int> Sorted = quickSort.SortList(list, 0, list.Count - 1);
+                        foreach (int i in Sorted)
+                        {
+                            Console.WriteLine(i);
+                        }*/
+            string writeText = "|TaskID| |   Title   | |Priority| |      Description      | |      DateDue      | |      DateSet      |";
+            File.WriteAllText("Tasks.txt", writeText);
         }
 
     }

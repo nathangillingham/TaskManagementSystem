@@ -58,7 +58,7 @@ namespace NEADatabase
             string sHeirarchy = Heirarchy.Text;
             string sPassword = Encryptor.Hash(Passwordtxt.Text);
 
-            string _sSqlString = "INSERT INTO UserID(Name, Heirarchy, HashValue) " + "Values('" + sName + "', '" + sHeirarchy + "', '" + sPassword + "')";
+            string _sSqlString = "INSERT INTO UserID(Name, Hierarchy, HashValue) " + "Values('" + sName + "', '" + sHeirarchy + "', '" + sPassword + "')";
 
             try
             {

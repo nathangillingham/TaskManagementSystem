@@ -131,7 +131,8 @@ namespace NEADatabase
             return GroupTasks;
 
         }
-        private void LoadTasks()
+
+        private List<int> AllTasks()
         {
             List<int> GroupTasks = new List<int>();
             GroupTasks = TasksFromGroups();
@@ -139,20 +140,35 @@ namespace NEADatabase
             List<int> IndividualTasks = new List<int>();
             IndividualTasks = PersonalTasks();
 
-            foreach (int GroupTask in GroupTasks)
+            List<int> AllTasks = GroupTasks.Concat(IndividualTasks).ToList();
+
+            return AllTasks;
+        }
+
+        private List<int> IncompleteTasks()
+        {
+            List<int> EveryTask = AllTasks();
+            List<int> IncompleteTasks = new List<int>();
+
+            foreach (int Task in EveryTask)
             {
-                if (!IsTaskCompleted(GroupTask))
+                if (!IsTaskCompleted(Task))
                 {
-                    DisplayTask(GroupTask);
+                    IncompleteTasks.Add(Task);
                 }
             }
 
-            foreach (int IndividualTask in IndividualTasks)
+            return IncompleteTasks;
+
+        }
+
+        private void LoadTasks()
+        {
+            List<int> Tasks = IncompleteTasks();
+
+            foreach (int Task in Tasks)
             {
-                if (!IsTaskCompleted(IndividualTask))
-                {
-                    DisplayTask(IndividualTask);
-                }
+                DisplayTask(Task);
             }
 
         }
@@ -312,44 +328,81 @@ namespace NEADatabase
 
         private void cmboAscDesc_SelectedIndexChanged(object sender, EventArgs e)
         {
-            string AscDesc = cmboAscDesc.Items[cmboAscDesc.SelectedIndex].ToString();
+            Object selectedItem = cmboAscDesc.SelectedItem;
         }
 
         private void btnWrite_Click(object sender, EventArgs e)
         {
+            string OrderBy = cmboOrderBy.SelectedItem.ToString();
+            string AscDesc = cmboAscDesc.SelectedItem.ToString();
+
+            object Tasks = AscDescFunction(AscDesc, Order(OrderBy));
 
         }
 
-
-        private int[] quicksort(int[] Tasks)
+        private List<int> Order(string OrderBy)
         {
 
+            List<int> UnsortedTasks = IncompleteTasks();
+            List<int> SortedTasks;
 
-        private void GetTasks()
-        {
-            List<int> GroupTasks = new List<int>();
-            GroupTasks = TasksFromGroups();
-
-            List<int> IndividualTasks = new List<int>();
-            IndividualTasks = PersonalTasks();
-
-            foreach (int GroupTask in GroupTasks)
+            if(OrderBy == null)
             {
-                if (!IsTaskCompleted(GroupTask))
-                {
-                    DisplayTask(GroupTask);
-                }
+                MessageBox.Show("Order By not selected!");
+            }
+            else if (OrderBy == "Date Due")
+            {
+                DateDueSort Sort = new DateDueSort();
+                SortedTasks = Sort.SortList(UnsortedTasks, 0, UnsortedTasks.Count - 1);
+                Console.WriteLine("this bit worked");
+                return SortedTasks;
+            }
+            else if (OrderBy == "Date Set")
+            {
+                DateSetSort Sort = new DateSetSort();
+                SortedTasks = Sort.SortList(UnsortedTasks, 0, UnsortedTasks.Count - 1);
+                return SortedTasks;
+            }
+            else if (OrderBy == "Priority")
+            {
+                PrioritySort Sort = new PrioritySort();
+                SortedTasks = Sort.SortList(UnsortedTasks, 0, UnsortedTasks.Count - 1);
+                return SortedTasks;
             }
 
-            foreach (int IndividualTask in IndividualTasks)
-            {
-                if (!IsTaskCompleted(IndividualTask))
-                {
-                    DisplayTask(IndividualTask);
-                }
-            }
-
+            return null;
         }
+
+        private object AscDescFunction(string AscDesc, List<int> SortedTasks)
+        {
+            if (AscDesc == null)
+            {
+                MessageBox.Show("Ascending or Descending not selected!");
+            }
+            else if (AscDesc == "Ascending")
+            {
+                Console.WriteLine("so did this bit");
+
+                MyQueue TaskQueue = new MyQueue(SortedTasks.Count);
+                foreach(int i in SortedTasks)
+                {
+                    TaskQueue.Enqueue(i);
+                }
+                return TaskQueue;
+            }
+            else if (AscDesc == "Descending")
+            {
+                MyStack TaskStack = new MyStack(SortedTasks.Count);
+                foreach (int i in SortedTasks)
+                {
+                    TaskStack.Push(i);
+                }
+                return TaskStack;
+            }
+
+            return null;
+        }
+        
 
         private void btnClose_Click(object sender, EventArgs e)
         {

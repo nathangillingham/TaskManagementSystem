@@ -31,6 +31,8 @@ namespace NEADatabase
         }
         private int GetTaskID(string tName)
         {
+
+
             string _sSqlString = $"SELECT TaskID FROM TaskID WHERE Title='{tName}'";
 
             var reader = Query.ExecuteSqlReturn(_sSqlString);
@@ -41,7 +43,10 @@ namespace NEADatabase
             }
             else
             {
-                return Convert.ToInt32(reader[0]);
+
+                int tt = Convert.ToInt32(reader[0]);
+
+                return tt;
 
             }
 
@@ -169,7 +174,7 @@ namespace NEADatabase
         }
         private int GetHierarchy(int UserID)
         {
-            string _sSqlString = $"SELECT Heirarchy FROM UserID WHERE UserID={UserID}";
+            string _sSqlString = $"SELECT Hierarchy FROM UserID WHERE UserID={UserID}";
             var reader = Query.ExecuteSqlReturn(_sSqlString);
             if(reader.Read())
             {
@@ -229,9 +234,10 @@ namespace NEADatabase
                 {
                     try
                     {
+
                         User.Trim();
-                        int TargetID = Convert.ToInt32(User);
-                        if(CanSetTask(UserID,TargetID))
+                        int TargetID = int.Parse(User);
+                        if (CanSetTask(UserID,TargetID))
                         {
                             AddTaskUser(TargetID, TaskID);
                         }
@@ -269,5 +275,9 @@ namespace NEADatabase
 
         }
 
+        private void AddTask_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }

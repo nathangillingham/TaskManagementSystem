@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.grpAddTask = new System.Windows.Forms.GroupBox();
+            this.txtGroups = new System.Windows.Forms.TextBox();
+            this.lblGroups = new System.Windows.Forms.Label();
             this.label5 = new System.Windows.Forms.Label();
             this.label4 = new System.Windows.Forms.Label();
             this.label3 = new System.Windows.Forms.Label();
@@ -41,8 +43,6 @@
             this.txtTitle = new System.Windows.Forms.TextBox();
             this.backgroundWorker1 = new System.ComponentModel.BackgroundWorker();
             this.btnSetTask = new System.Windows.Forms.Button();
-            this.lblGroups = new System.Windows.Forms.Label();
-            this.txtGroups = new System.Windows.Forms.TextBox();
             this.grpAddTask.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -66,6 +66,24 @@
             this.grpAddTask.TabIndex = 0;
             this.grpAddTask.TabStop = false;
             this.grpAddTask.Text = "Add Task";
+            // 
+            // txtGroups
+            // 
+            this.txtGroups.Location = new System.Drawing.Point(185, 108);
+            this.txtGroups.Name = "txtGroups";
+            this.txtGroups.Size = new System.Drawing.Size(177, 20);
+            this.txtGroups.TabIndex = 11;
+            this.txtGroups.Text = "GroupID1,GroupID2...";
+            this.txtGroups.TextChanged += new System.EventHandler(this.txtGroups_TextChanged);
+            // 
+            // lblGroups
+            // 
+            this.lblGroups.AutoSize = true;
+            this.lblGroups.Location = new System.Drawing.Point(80, 111);
+            this.lblGroups.Name = "lblGroups";
+            this.lblGroups.Size = new System.Drawing.Size(41, 13);
+            this.lblGroups.TabIndex = 10;
+            this.lblGroups.Text = "Groups";
             // 
             // label5
             // 
@@ -159,24 +177,6 @@
             this.btnSetTask.UseVisualStyleBackColor = true;
             this.btnSetTask.Click += new System.EventHandler(this.btnSetTask_Click);
             // 
-            // lblGroups
-            // 
-            this.lblGroups.AutoSize = true;
-            this.lblGroups.Location = new System.Drawing.Point(80, 111);
-            this.lblGroups.Name = "lblGroups";
-            this.lblGroups.Size = new System.Drawing.Size(41, 13);
-            this.lblGroups.TabIndex = 10;
-            this.lblGroups.Text = "Groups";
-            // 
-            // txtGroups
-            // 
-            this.txtGroups.Location = new System.Drawing.Point(185, 108);
-            this.txtGroups.Name = "txtGroups";
-            this.txtGroups.Size = new System.Drawing.Size(177, 20);
-            this.txtGroups.TabIndex = 11;
-            this.txtGroups.Text = "GroupID1,GroupID2...";
-            this.txtGroups.TextChanged += new System.EventHandler(this.txtGroups_TextChanged);
-            // 
             // AddTask
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -186,6 +186,7 @@
             this.Controls.Add(this.grpAddTask);
             this.Name = "AddTask";
             this.Text = "AddTask";
+            this.Load += new System.EventHandler(this.AddTask_Load);
             this.grpAddTask.ResumeLayout(false);
             this.grpAddTask.PerformLayout();
             this.ResumeLayout(false);
