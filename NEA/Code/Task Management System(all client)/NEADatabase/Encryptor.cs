@@ -12,18 +12,17 @@ namespace NEADatabase
         public static string Hash(string text)
         {
             MD5 md5 = new MD5CryptoServiceProvider();
-
-            //compute hash from the bytes of text  
+            //creates new instance of md5 object
+            
             md5.ComputeHash(ASCIIEncoding.ASCII.GetBytes(text));
 
-            //get hash result after compute it  
+            //gets hash of string and stores as byte array 
             byte[] result = md5.Hash;
 
             StringBuilder password = new StringBuilder();
             for (int j = 0; j < result.Length; j++)
             {
-                //change it into 2 hexadecimal digits  
-                //for each byte  
+                //changes to string in hexadecimal
                 password.Append(result[j].ToString("x2"));
             }
 

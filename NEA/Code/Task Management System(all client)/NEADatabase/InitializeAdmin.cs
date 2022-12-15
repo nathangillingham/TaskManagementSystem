@@ -35,6 +35,10 @@ namespace NEADatabase
             }
         }
 
+        /// <summary>
+        /// Inserts new user as the admin, has the most permissions so always hierarchy of 1, username Admin always used, identified at login
+        /// </summary>
+        /// <param name="password"></param>
         private void AddUser(string password)
         {
             string sName = "Admin";
@@ -43,19 +47,26 @@ namespace NEADatabase
 
             string _sSqlString = "INSERT INTO UserID(Name, Hierarchy, HashValue) " + "Values('" + sName + "', '" + sHeirarchy + "', '" + sPassword + "')";
 
-            try
+            if (password.Length > 0)
             {
-                Query.ExecuteSql(_sSqlString);
-                MessageBox.Show("Admin Created");
-                var Login = new Login();
-                this.Hide();
-                Login.Show();
-                
+                try
+                {
+                    Query.ExecuteSql(_sSqlString);
+                    MessageBox.Show("Admin Created");
+                    var Login = new Login();
+                    this.Hide();
+                    Login.Show();
 
+
+                }
+                catch
+                {
+                    MessageBox.Show("Error!");
+                }
             }
-            catch
+            else
             {
-                MessageBox.Show("Error!");
+                MessageBox.Show("Input valid password!");
             }
 
 
@@ -65,6 +76,11 @@ namespace NEADatabase
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
             
+        }
+
+        private void InitializeAdmin_Load(object sender, EventArgs e)
+        {
+
         }
     }
 }

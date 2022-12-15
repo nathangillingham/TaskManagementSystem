@@ -29,9 +29,14 @@ namespace NEADatabase
             InitializeComponent();
             this.UserID = UserID;
         }
+
+        /// <summary>
+        /// Returns the Id of the desired task based on its name, only one output as name is unique
+        /// </summary>
+        /// <param name="tName"></param>
+        /// <returns></returns>
         private int GetTaskID(string tName)
         {
-
 
             string _sSqlString = $"SELECT TaskID FROM TaskID WHERE Title='{tName}'";
 
@@ -53,6 +58,9 @@ namespace NEADatabase
 
         }
 
+        /// <summary>
+        /// Creates an entry in the task table with input values, ignoring users and groups until after the entry is created
+        /// </summary>
         private void SetTask()
         {
             string Title = txtTitle.Text;
@@ -74,6 +82,11 @@ namespace NEADatabase
             }
         }
 
+        /// <summary>
+        /// Returns the owner of the group based on the groupID
+        /// </summary>
+        /// <param name="GroupID"></param>
+        /// <returns></returns>
         private int GetGroupOwner(int GroupID)
         {
 
@@ -100,6 +113,12 @@ namespace NEADatabase
             return GroupName;
         }
 
+        /// <summary>
+        /// Creates the relationship betweeen a task and the group it is set to in the database
+        /// </summary>
+        /// <param name="GroupID"></param>
+        /// <param name="TaskID"></param>
+
         private void AddTaskGroup(int GroupID, int TaskID)
         {
             string _sSqlString2 = "INSERT INTO Task_Groups(GroupID, TaskID) " + "Values('" + GroupID + "', '" + TaskID + "')";
@@ -113,6 +132,9 @@ namespace NEADatabase
             }
         }
 
+        /// <summary>
+        /// Checks whether each group is owned by the current user, and then calls the method to enter this in the database if true
+        /// </summary>
         private void GroupTask()
         {
             string TempG = txtGroups.Text;
@@ -161,6 +183,11 @@ namespace NEADatabase
             }
         }
 
+        /// <summary>
+        /// Checks if an Id exists, returns false if zero because IDs are indexed at one
+        /// </summary>
+        /// <param name="Record"></param>
+        /// <returns></returns>
         private bool ValidRecord(int Record)
         {
             if(Record > 0)
@@ -187,6 +214,12 @@ namespace NEADatabase
 
         }
 
+        /// <summary>
+        /// Compares the hierarchies of two users two see if one has a greater access level than another
+        /// </summary>
+        /// <param name="UserID"></param>
+        /// <param name="TargetID"></param>
+        /// <returns></returns>
         private bool CanSetTask(int UserID, int TargetID)
         {
             int UserHierarchy = GetHierarchy(UserID);
@@ -209,6 +242,11 @@ namespace NEADatabase
             }
         }
 
+        /// <summary>
+        /// Creates relationship between a task and the user it is individually set to
+        /// </summary>
+        /// <param name="TargetID"></param>
+        /// <param name="TaskID"></param>
         private void AddTaskUser(int TargetID, int TaskID)
         {
             string _sSqlString = "INSERT INTO HasTaskID(UserID, TaskID) " + "Values('" + TargetID + "', '" + TaskID + "')";
@@ -223,6 +261,9 @@ namespace NEADatabase
             }
         }
 
+        /// <summary>
+        /// Checks is the current user is able to set selected users tasks, then calls the function to create the relationship
+        /// </summary>
         private void IndividualTask()
         {
             string Users = txtUser.Text;

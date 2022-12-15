@@ -256,6 +256,7 @@
             this.grpSearchTasks.TabIndex = 8;
             this.grpSearchTasks.TabStop = false;
             this.grpSearchTasks.Text = "Search Tasks";
+            this.grpSearchTasks.Enter += new System.EventHandler(this.grpSearchTasks_Enter);
             // 
             // btnReset
             // 

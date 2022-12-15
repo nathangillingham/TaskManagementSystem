@@ -7,7 +7,7 @@ namespace NEADatabase
 {
     public class MyStack : DataStructure
     {
-
+        //inheritance
         int topPointer;
         int[] StackArray;
         int size;
@@ -19,6 +19,8 @@ namespace NEADatabase
             this.size = size;
         }
 
+        //polymorphiism
+        //filehandling
         public override void SaveStructure()
         {
             StreamWriter WriteStream = SetupWriter();
@@ -32,7 +34,7 @@ namespace NEADatabase
             MessageBox.Show("Tasks Saved!");
         }
 
-
+        //checks if stack is empty
         public bool IsEmpty()
         {
             if(topPointer == 0)
@@ -45,6 +47,7 @@ namespace NEADatabase
             }
         }
 
+        //puts integer on top of stack
         public void Push(int number)
         {
             if (topPointer == this.size)
@@ -58,6 +61,7 @@ namespace NEADatabase
             }
         }
 
+        //takes integer off stack
         public int Pop()
         {
             if (topPointer == 0)
@@ -71,6 +75,7 @@ namespace NEADatabase
             }
         }
 
+        //looks at top value, doesnt pop
         public int Peek()
         {
             if (topPointer == 0)

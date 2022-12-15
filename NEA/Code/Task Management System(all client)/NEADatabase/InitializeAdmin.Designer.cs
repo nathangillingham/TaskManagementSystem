@@ -81,6 +81,7 @@
             this.Controls.Add(this.lblUsername);
             this.Name = "InitializeAdmin";
             this.Text = "InitializeAdmin";
+            this.Load += new System.EventHandler(this.InitializeAdmin_Load);
             this.ResumeLayout(false);
             this.PerformLayout();
 

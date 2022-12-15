@@ -12,7 +12,7 @@ namespace NEADatabase
 {
     public abstract class DataStructure
     {
-
+        //abstraction
         public string USER;
         public string CONNECTION_STRING;
         SQL Query = new SQL();
@@ -21,11 +21,13 @@ namespace NEADatabase
 
         }
 
+        //polymorphism
         public virtual void SaveStructure()
         {
 
         }
 
+        //File Handling
         public StreamWriter SetupWriter()
         {
 

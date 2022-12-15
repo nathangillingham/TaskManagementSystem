@@ -38,15 +38,19 @@
             this.dgvUsersInGroup = new System.Windows.Forms.DataGridView();
             this.dgvTasksInGroup = new System.Windows.Forms.DataGridView();
             this.grpDisplayGroupProps = new System.Windows.Forms.GroupBox();
-            this.lblGroupID = new System.Windows.Forms.Label();
-            this.txtGroupID = new System.Windows.Forms.TextBox();
             this.btnDisplayGroupProps = new System.Windows.Forms.Button();
+            this.txtGroupID = new System.Windows.Forms.TextBox();
+            this.lblGroupID = new System.Windows.Forms.Label();
             this.grpAddTaskToGroup = new System.Windows.Forms.GroupBox();
+            this.btnAddTask = new System.Windows.Forms.Button();
+            this.lblTaskID = new System.Windows.Forms.Label();
+            this.txtTaskID = new System.Windows.Forms.TextBox();
             this.txtGroupID2 = new System.Windows.Forms.TextBox();
             this.lblGroupID2 = new System.Windows.Forms.Label();
-            this.txtTaskID = new System.Windows.Forms.TextBox();
-            this.lblTaskID = new System.Windows.Forms.Label();
-            this.btnAddTask = new System.Windows.Forms.Button();
+            this.lbltasksingroups = new System.Windows.Forms.Label();
+            this.lblusersingroups = new System.Windows.Forms.Label();
+            this.valueusersingroups = new System.Windows.Forms.Label();
+            this.valuetasksingroups = new System.Windows.Forms.Label();
             this.grpCreateGroup.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.dgvOwnedGroups)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.dgvUsersInGroup)).BeginInit();
@@ -136,7 +140,7 @@
             this.dgvTasksInGroup.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgvTasksInGroup.Location = new System.Drawing.Point(516, 77);
             this.dgvTasksInGroup.Name = "dgvTasksInGroup";
-            this.dgvTasksInGroup.Size = new System.Drawing.Size(255, 192);
+            this.dgvTasksInGroup.Size = new System.Drawing.Size(240, 192);
             this.dgvTasksInGroup.TabIndex = 5;
             // 
             // grpDisplayGroupProps
@@ -151,23 +155,6 @@
             this.grpDisplayGroupProps.TabStop = false;
             this.grpDisplayGroupProps.Text = "Display Group Properties";
             // 
-            // lblGroupID
-            // 
-            this.lblGroupID.AutoSize = true;
-            this.lblGroupID.Location = new System.Drawing.Point(98, 26);
-            this.lblGroupID.Name = "lblGroupID";
-            this.lblGroupID.Size = new System.Drawing.Size(50, 13);
-            this.lblGroupID.TabIndex = 7;
-            this.lblGroupID.Text = "GroupID ";
-            // 
-            // txtGroupID
-            // 
-            this.txtGroupID.Location = new System.Drawing.Point(169, 19);
-            this.txtGroupID.Name = "txtGroupID";
-            this.txtGroupID.Size = new System.Drawing.Size(193, 20);
-            this.txtGroupID.TabIndex = 7;
-            this.txtGroupID.TextChanged += new System.EventHandler(this.txtGroupID_TextChanged);
-            // 
             // btnDisplayGroupProps
             // 
             this.btnDisplayGroupProps.Location = new System.Drawing.Point(242, 45);
@@ -177,6 +164,23 @@
             this.btnDisplayGroupProps.Text = "Display";
             this.btnDisplayGroupProps.UseVisualStyleBackColor = true;
             this.btnDisplayGroupProps.Click += new System.EventHandler(this.btnDisplayGroupProps_Click);
+            // 
+            // txtGroupID
+            // 
+            this.txtGroupID.Location = new System.Drawing.Point(169, 19);
+            this.txtGroupID.Name = "txtGroupID";
+            this.txtGroupID.Size = new System.Drawing.Size(193, 20);
+            this.txtGroupID.TabIndex = 7;
+            this.txtGroupID.TextChanged += new System.EventHandler(this.txtGroupID_TextChanged);
+            // 
+            // lblGroupID
+            // 
+            this.lblGroupID.AutoSize = true;
+            this.lblGroupID.Location = new System.Drawing.Point(98, 26);
+            this.lblGroupID.Name = "lblGroupID";
+            this.lblGroupID.Size = new System.Drawing.Size(50, 13);
+            this.lblGroupID.TabIndex = 7;
+            this.lblGroupID.Text = "GroupID ";
             // 
             // grpAddTaskToGroup
             // 
@@ -191,6 +195,33 @@
             this.grpAddTaskToGroup.TabIndex = 7;
             this.grpAddTaskToGroup.TabStop = false;
             this.grpAddTaskToGroup.Text = "Add Task to Group";
+            // 
+            // btnAddTask
+            // 
+            this.btnAddTask.Location = new System.Drawing.Point(140, 95);
+            this.btnAddTask.Name = "btnAddTask";
+            this.btnAddTask.Size = new System.Drawing.Size(120, 21);
+            this.btnAddTask.TabIndex = 12;
+            this.btnAddTask.Text = "Add Task";
+            this.btnAddTask.UseVisualStyleBackColor = true;
+            this.btnAddTask.Click += new System.EventHandler(this.btnAddTask_Click);
+            // 
+            // lblTaskID
+            // 
+            this.lblTaskID.AutoSize = true;
+            this.lblTaskID.Location = new System.Drawing.Point(11, 59);
+            this.lblTaskID.Name = "lblTaskID";
+            this.lblTaskID.Size = new System.Drawing.Size(42, 13);
+            this.lblTaskID.TabIndex = 11;
+            this.lblTaskID.Text = "TaskID";
+            // 
+            // txtTaskID
+            // 
+            this.txtTaskID.Location = new System.Drawing.Point(67, 56);
+            this.txtTaskID.Name = "txtTaskID";
+            this.txtTaskID.Size = new System.Drawing.Size(193, 20);
+            this.txtTaskID.TabIndex = 10;
+            this.txtTaskID.TextChanged += new System.EventHandler(this.txtTaskID_TextChanged);
             // 
             // txtGroupID2
             // 
@@ -209,38 +240,51 @@
             this.lblGroupID2.TabIndex = 9;
             this.lblGroupID2.Text = "GroupID ";
             // 
-            // txtTaskID
+            // lbltasksingroups
             // 
-            this.txtTaskID.Location = new System.Drawing.Point(67, 56);
-            this.txtTaskID.Name = "txtTaskID";
-            this.txtTaskID.Size = new System.Drawing.Size(193, 20);
-            this.txtTaskID.TabIndex = 10;
-            this.txtTaskID.TextChanged += new System.EventHandler(this.txtTaskID_TextChanged);
+            this.lbltasksingroups.AutoSize = true;
+            this.lbltasksingroups.Location = new System.Drawing.Point(513, 49);
+            this.lbltasksingroups.Name = "lbltasksingroups";
+            this.lbltasksingroups.Size = new System.Drawing.Size(87, 13);
+            this.lbltasksingroups.TabIndex = 8;
+            this.lbltasksingroups.Text = "Tasks in Groups:";
             // 
-            // lblTaskID
+            // lblusersingroups
             // 
-            this.lblTaskID.AutoSize = true;
-            this.lblTaskID.Location = new System.Drawing.Point(11, 59);
-            this.lblTaskID.Name = "lblTaskID";
-            this.lblTaskID.Size = new System.Drawing.Size(42, 13);
-            this.lblTaskID.TabIndex = 11;
-            this.lblTaskID.Text = "TaskID";
+            this.lblusersingroups.AutoSize = true;
+            this.lblusersingroups.Location = new System.Drawing.Point(252, 49);
+            this.lblusersingroups.Name = "lblusersingroups";
+            this.lblusersingroups.Size = new System.Drawing.Size(85, 13);
+            this.lblusersingroups.TabIndex = 9;
+            this.lblusersingroups.Text = "Users in Groups:";
             // 
-            // btnAddTask
+            // valueusersingroups
             // 
-            this.btnAddTask.Location = new System.Drawing.Point(140, 95);
-            this.btnAddTask.Name = "btnAddTask";
-            this.btnAddTask.Size = new System.Drawing.Size(120, 21);
-            this.btnAddTask.TabIndex = 12;
-            this.btnAddTask.Text = "Add Task";
-            this.btnAddTask.UseVisualStyleBackColor = true;
-            this.btnAddTask.Click += new System.EventHandler(this.btnAddTask_Click);
+            this.valueusersingroups.AutoSize = true;
+            this.valueusersingroups.Location = new System.Drawing.Point(354, 49);
+            this.valueusersingroups.Name = "valueusersingroups";
+            this.valueusersingroups.Size = new System.Drawing.Size(0, 13);
+            this.valueusersingroups.TabIndex = 10;
+            this.valueusersingroups.Click += new System.EventHandler(this.valueusersingroups_Click);
+            // 
+            // valuetasksingroups
+            // 
+            this.valuetasksingroups.AutoSize = true;
+            this.valuetasksingroups.Location = new System.Drawing.Point(625, 49);
+            this.valuetasksingroups.Name = "valuetasksingroups";
+            this.valuetasksingroups.Size = new System.Drawing.Size(0, 13);
+            this.valuetasksingroups.TabIndex = 11;
+            this.valuetasksingroups.Click += new System.EventHandler(this.valuetasksingroups_Click);
             // 
             // CreateGroup
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(800, 450);
+            this.Controls.Add(this.valuetasksingroups);
+            this.Controls.Add(this.valueusersingroups);
+            this.Controls.Add(this.lblusersingroups);
+            this.Controls.Add(this.lbltasksingroups);
             this.Controls.Add(this.grpAddTaskToGroup);
             this.Controls.Add(this.grpDisplayGroupProps);
             this.Controls.Add(this.dgvTasksInGroup);
@@ -260,6 +304,7 @@
             this.grpAddTaskToGroup.ResumeLayout(false);
             this.grpAddTaskToGroup.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 
@@ -284,5 +329,9 @@
         private System.Windows.Forms.TextBox txtTaskID;
         private System.Windows.Forms.TextBox txtGroupID2;
         private System.Windows.Forms.Label lblGroupID2;
+        private System.Windows.Forms.Label lbltasksingroups;
+        private System.Windows.Forms.Label lblusersingroups;
+        private System.Windows.Forms.Label valueusersingroups;
+        private System.Windows.Forms.Label valuetasksingroups;
     }
 }

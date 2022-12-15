@@ -28,6 +28,12 @@ namespace NEADatabase
         public int UserID;
         SQL Query = new SQL();
 
+        
+        /// <summary>
+        /// Establishes connection with database, uses result to display in particualr data grid view
+        /// </summary>
+        /// <param name="sSqlString"></param>
+
         public void ExecuteSqlDisplay(String sSqlString)
         {
             DataTable dt = new DataTable();
@@ -54,6 +60,10 @@ namespace NEADatabase
                 }
             }
         }
+
+        /// <summary>
+        /// Returns all tasks done using query based on the user logged i
+        /// </summary>
         private List<int> TasksDone()
         {
             string sSqlstring = $"SELECT TaskID FROM Task_Completed WHERE EXISTS (SELECT TaskID FROM Task_Completed WHERE UserID={this.UserID})";
@@ -69,6 +79,11 @@ namespace NEADatabase
             return TasksCompleted;
         } 
 
+        /// <summary>
+        /// Checks if specific task is completed based on existance in TasksDone() returned array
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <returns></returns>
         private bool IsTaskCompleted(int TaskID)
         {
             List<int> TasksCompleted = new List<int>();
@@ -83,12 +98,21 @@ namespace NEADatabase
             }
         }
 
+        /// <summary>
+        /// Uses SqlDisplay to show task to user if it has been assigned and not completed
+        /// </summary>
+        /// <param name="TaskID"></param>
         private void DisplayTask(int TaskID)
         {
             string sSqlString = $"Select * FROM TaskID WHERE TaskID={TaskID};";
             ExecuteSqlDisplay(sSqlString);
         }
 
+
+        /// <summary>
+        /// Returns all the tasks which have been assigned individually, not from a group, this prevents dusplication in displaying tasks
+        /// </summary>
+        /// <returns></returns>
         private List<int> PersonalTasks()
         {
             string sSqlstring = $"SELECT TaskID FROM HasTaskID WHERE UserID={UserID}";
@@ -116,6 +140,10 @@ namespace NEADatabase
             return IndividualTasks;
         }
 
+        /// <summary>
+        /// Returns the tasks which have been assigned to usre through a group
+        /// </summary>
+        /// <returns></returns>
         private List<int> TasksFromGroups()
         {
             string sSqlString = $"SELECT TaskID FROM Task_Groups INNER JOIN User_Groups ON Task_Groups.GroupID = User_Groups.GroupID WHERE UserID={UserID}";
@@ -132,6 +160,10 @@ namespace NEADatabase
 
         }
 
+        /// <summary>
+        /// Adds previous two functions, so that there is only one of each task in the set
+        /// </summary>
+        /// <returns></returns>
         private List<int> AllTasks()
         {
             List<int> GroupTasks = new List<int>();
@@ -145,6 +177,10 @@ namespace NEADatabase
             return AllTasks;
         }
 
+        /// <summary>
+        /// Uses tasks which have been completed to identify which dont exist int eh completed set
+        /// </summary>
+        /// <returns></returns>
         private List<int> IncompleteTasks()
         {
             List<int> EveryTask = AllTasks();
@@ -162,6 +198,9 @@ namespace NEADatabase
 
         }
 
+        /// <summary>
+        /// Displays all the incomplete tasks when the form is loaded
+        /// </summary>
         private void LoadTasks()
         {
             List<int> Tasks = IncompleteTasks();
@@ -173,6 +212,9 @@ namespace NEADatabase
 
         }
 
+        /// <summary>
+        /// Instantiates the fields of the data grid view, corresponding to each field in the TaskID table
+        /// </summary>
         private void SetupGrid()
         {
             // Define number of columns and set headers
@@ -187,6 +229,10 @@ namespace NEADatabase
             dgvTasks.Columns[3].DefaultCellStyle.Format = "dd/MM/yyyy";
         }
 
+        /// <summary>
+        /// When a task, in the form of a datatable, is passed, it matched the field(eg TaskID) with the colum in the data grid view, and assigns the value
+        /// </summary>
+        /// <param name="_dt"></param>
         private void DisplayData(DataTable _dt)
         {
 
@@ -240,6 +286,11 @@ namespace NEADatabase
             LoadTasks();
         }
 
+        /// <summary>
+        /// Sorts the data grid view by DateSet, DateDue, Priority
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void rdoDate_CheckedChanged(object sender, EventArgs e)
         {
 
@@ -271,6 +322,11 @@ namespace NEADatabase
             Console.WriteLine(this.username);
         }
 
+        /// <summary>
+        /// Determines whether the user has ever been set a task, completed or not
+        /// </summary>
+        /// <param name="TaskID"></param>
+        /// <returns></returns>
         private bool HasBeenSet(int TaskID)
         {
             List<int> GroupTasks = new List<int>();
@@ -288,6 +344,12 @@ namespace NEADatabase
                 return false;
             }
         }
+
+
+
+        /// <summary>
+        /// Decides whether the input task is valid, and if so, creates a new entry in the task_completed table corresponding to the task and user
+        /// </summary>
         private void CompleteTask()
         {
             try
@@ -331,16 +393,34 @@ namespace NEADatabase
             Object selectedItem = cmboAscDesc.SelectedItem;
         }
 
+        /// <summary>
+        /// Writes tasks to file, based on ascending or descending the data structure used is decided
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnWrite_Click(object sender, EventArgs e)
         {
-            string OrderBy = cmboOrderBy.SelectedItem.ToString();
-            string AscDesc = cmboAscDesc.SelectedItem.ToString();
+            try
+            {
+                string OrderBy = cmboOrderBy.SelectedItem.ToString();
+                string AscDesc = cmboAscDesc.SelectedItem.ToString();
 
-            DataStructure Tasks = AscDescFunction(AscDesc, Order(OrderBy));
-            Tasks.SaveStructure();
+                DataStructure Tasks = AscDescFunction(AscDesc, Order(OrderBy));
+                Tasks.SaveStructure();
+            }
+            catch
+            {
+                MessageBox.Show("Select Order and Sort condition!");
+            }
 
         }
 
+
+        /// <summary>
+        /// Determines the factor the tassk should be sorted by, sorts them accordingly, and returns the list
+        /// </summary>
+        /// <param name="OrderBy"></param>
+        /// <returns></returns>
         private List<int> Order(string OrderBy)
         {
 
@@ -373,6 +453,12 @@ namespace NEADatabase
             return null;
         }
 
+        /// <summary>
+        /// Determines the order of sorting, and fills the appropriate data structure
+        /// </summary>
+        /// <param name="AscDesc"></param>
+        /// <param name="SortedTasks"></param>
+        /// <returns></returns>
         private DataStructure AscDescFunction(string AscDesc, List<int> SortedTasks)
         {
             if (AscDesc == null)
@@ -428,7 +514,7 @@ namespace NEADatabase
 
         private void ShowParameterisedTasks(List<int> ParameterisedTasks)
         {
-            List<int> Tasks = AllTasks();
+            List<int> Tasks = IncompleteTasks();
             dgvTasks.Rows.Clear();
 
             foreach (int TaskID in ParameterisedTasks)
@@ -440,7 +526,12 @@ namespace NEADatabase
             }
         }
         
-
+        /// <summary>
+        /// returns the list of tasks that should be displayed based ona a search
+        /// </summary>
+        /// <param name="SearchBy"></param>
+        /// <param name="Parameter"></param>
+        /// <returns></returns>
         private List<int> ParameterisedTasks(string SearchBy, string Parameter)
         {
 
@@ -464,6 +555,8 @@ namespace NEADatabase
                 }
                 catch
                 {
+                    //Used if the parameter is a date and needs to be syntaxed differently for the query
+
                     string sSqlString = $"SELECT TaskID FROM TaskID WHERE {SearchBy}={Parameter}";
                     var reader = Query.ExecuteSqlReturn(sSqlString);
 
@@ -512,5 +605,9 @@ namespace NEADatabase
 
         }
 
+        private void grpSearchTasks_Enter(object sender, EventArgs e)
+        {
+
+        }
     }
 }

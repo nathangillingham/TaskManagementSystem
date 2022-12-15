@@ -6,6 +6,7 @@ namespace NEADatabase
 {
     public class MyQueue : DataStructure
     {
+        //inheritance
         int[] QueueArray;
         int tail = 0;
         int head = 0;
@@ -17,6 +18,7 @@ namespace NEADatabase
             this.length = length;
         }
 
+        //file handling
         public override void SaveStructure()
         {
             StreamWriter WriteStream = SetupWriter();
@@ -30,6 +32,7 @@ namespace NEADatabase
             MessageBox.Show("Tasks Saved!");
         }
 
+        //adds integer to queue
         public void Enqueue(int number)
         {
             if(tail > length)
@@ -43,6 +46,7 @@ namespace NEADatabase
             }
         }
 
+        //removes integer from queue
         public int Dequeue()
         {
             Console.WriteLine(head);
@@ -58,6 +62,7 @@ namespace NEADatabase
             return value;
         }
 
+        //checks if structure is empty
         public bool IsEmpty()
         {
             if (tail==head)

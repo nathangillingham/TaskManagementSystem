@@ -18,21 +18,25 @@ namespace NEADatabase
             var n = Lindex;
             var m = Rindex;
             var fulcrum = list[Lindex];
+            //identifies which value will be compared with all others
 
             while (n <= m)
             {
                 while (GetDateDue(list[n]) < GetDateDue(fulcrum))
                 {
+                    //compares values left
                     n++;
                 }
 
                 while (GetDateDue(list[m]) > GetDateDue(fulcrum))
                 {
+                    //compares right
                     m--;
                 }
 
                 if (n <= m)
                 {
+                    //swaps values
                     int temp = list[n];
                     list[n] = list[m];
                     list[m] = temp;
@@ -43,12 +47,13 @@ namespace NEADatabase
 
             if (Lindex < m)
             {
-
+                //recursion
                 SortList(list, Lindex, m);
 
             }
             if (n < Rindex)
             {
+                //recursion
                 SortList(list, n, Rindex);
             }
 

@@ -88,6 +88,12 @@ namespace NEADatabase
             dgvTasksInGroup.Columns[5].DefaultCellStyle.Format = "dd/MM/yyyy";
         }
 
+
+        /// <summary>
+        /// Modified version of display data which doesnt need to know the type or size of the incoming data to display it
+        /// </summary>
+        /// <param name="_dt"></param>
+        /// <param name="dgv"></param>
         private void DisplayData(DataTable _dt, DataGridView dgv)
         {
             for (int i = 0; i <= _dt.Rows.Count - 1; i++)
@@ -140,6 +146,43 @@ namespace NEADatabase
 
         }
 
+        private int GetHierarchy(int UserID)
+        {
+            string _sSqlString = $"SELECT Hierarchy FROM UserID WHERE UserID={UserID}";
+            var reader = Query.ExecuteSqlReturn(_sSqlString);
+            if (reader.Read())
+            {
+                return int.Parse(reader[0].ToString());
+            }
+            else
+            {
+                return 0;
+            }
+
+        }
+
+        private bool CanAddToGroup(int UserID, int TargetID)
+        {
+            int UserHierarchy = GetHierarchy(UserID);
+            int TargetHierarchy = GetHierarchy(TargetID);
+
+            if ((UserHierarchy != 0) && (TargetHierarchy != 0))
+            {
+                if (UserHierarchy <= TargetHierarchy)
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
+            }
+        }
+
         private void AddUserGroup(int GroupID, int MemberID)
         {
             string _sSqlString = "INSERT INTO User_Groups(GroupID, UserID) " + "Values('" + GroupID + "', '" + MemberID + "')";
@@ -153,6 +196,10 @@ namespace NEADatabase
                 MessageBox.Show("Error!");
             }
         }
+
+        /// <summary>
+        /// Creates new group entry in GroupID using current userID as OwnerID
+        /// </summary>
         private void AddGroup()
         {
             string GroupName = txtGroupName.Text;
@@ -183,6 +230,25 @@ namespace NEADatabase
             }
         }
 
+        /// <summary>
+        /// String Handling to seperate each user into different index
+        /// </summary>
+        /// <param name="Member"></param>
+        /// <returns></returns>
+        private int TrimUserID(string Member)
+        {
+            try
+            {
+                Member.Trim();
+                int MemberID = Convert.ToInt32(Member);
+
+                return MemberID;
+            }
+            catch
+            {
+                return 0;
+            }
+        }
         private void AddUsers()
         {
             string TempM = txtMembers.Text;
@@ -192,19 +258,17 @@ namespace NEADatabase
             {
                 foreach (string Member in Members)
                 {
-
-                    try
+                    int MemberID = TrimUserID(Member);
+                    if (CanAddToGroup(this.UserID,MemberID ))
                     {
-                        Member.Trim();
-                        int MemberID = Convert.ToInt32(Member);
 
                         AddUserGroup(GroupID, MemberID);
+
                     }
-                    catch
+                    else
                     {
-
+                        MessageBox.Show("Some users couldn’t be added");
                     }
-
                 }
             }
             else
@@ -239,6 +303,36 @@ namespace NEADatabase
             ExecuteSqlDisplay(sSqlString, dgvTasksInGroup);
         }
 
+        //aggregate function
+        public int CountGroupTasks(int GroupID)
+        {
+            string sSqlString = $"SELECT COUNT(TaskID.TaskID) FROM TaskID INNER JOIN Task_Groups ON TaskID.TaskID = Task_Groups.TaskID WHERE GroupID={GroupID}";
+            var reader = Query.ExecuteSqlReturn(sSqlString);
+            if (!reader.Read())
+            {
+                return 0;
+            }
+            else
+            {
+                return Convert.ToInt32(reader[0]);
+            }
+        }
+
+        //aggregate function
+        public int CountGroupUsers(int GroupID)
+        {
+            string sSqlString = $"SELECT COUNT(UserID.UserID) FROM UserID INNER JOIN User_Groups ON UserID.UserID = User_Groups.UserID WHERE GroupID={GroupID}";
+            var reader = Query.ExecuteSqlReturn(sSqlString);
+            if (!reader.Read())
+            {
+                return 0;
+            }
+            else
+            {
+                return Convert.ToInt32(reader[0]);
+            }
+        }
+
 
         private void dgvGroups_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
@@ -263,6 +357,11 @@ namespace NEADatabase
 
         }
 
+        /// <summary>
+        /// Displays the properties of the selcted group, the tasks and users that belong to it
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void btnDisplayGroupProps_Click(object sender, EventArgs e)
         {
             try
@@ -274,6 +373,8 @@ namespace NEADatabase
                 {
                     DisplayGroupUsers(GroupID);
                     DisplayGroupTasks(GroupID);
+                    valuetasksingroups.Text = CountGroupTasks(GroupID).ToString();
+                    valueusersingroups.Text = CountGroupUsers(GroupID).ToString();
                 }
             }
             catch
@@ -315,6 +416,16 @@ namespace NEADatabase
         }
 
         private void txtTaskID_TextChanged(object sender, EventArgs e)
+        {
+
+        }
+
+        private void valueusersingroups_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void valuetasksingroups_Click(object sender, EventArgs e)
         {
 
         }

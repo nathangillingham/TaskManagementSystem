@@ -32,6 +32,12 @@ namespace NEADatabase
 
         }
 
+        /// <summary>
+        /// Passes string to encryptor and gets back hashed value
+        /// </summary>
+        /// <param name="Username"></param>
+        /// <returns></returns>
+
         private string GetHash(string Username)
         {
             string _sSqlString = $"SELECT HashValue FROM UserID WHERE Name='{Username}'";
@@ -48,6 +54,10 @@ namespace NEADatabase
             return Hash;
         }
 
+
+        /// <summary>
+        /// Grants access if username exists, and hashed input is equal to stored hash
+        /// </summary>
         private void LoginAttempt()
         {
             string Username = UsernameText.Text;
@@ -58,6 +68,8 @@ namespace NEADatabase
             {
                 if (Username == "Admin")
                 {
+                    //If the login is an admin, redirect to admin window
+
                     var Admin = new Admin();
                     Admin.Show();
                 }

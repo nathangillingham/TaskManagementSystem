@@ -52,26 +52,63 @@ namespace NEADatabase
 
         }
 
+        /// <summary>
+        /// creates new user in the UserID table
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void button1_Click(object sender, EventArgs e)
+        {
+
+            if (ValidInput())
+            {
+                string sName = UserNametxt.Text;
+                int sHeirarchy = Convert.ToInt32(Heirarchy.Text);
+                string sPassword = Encryptor.Hash(Passwordtxt.Text);
+
+                string _sSqlString = "INSERT INTO UserID(Name, Hierarchy, HashValue) " + "Values('" + sName + "', '" + sHeirarchy + "', '" + sPassword + "')";
+
+                try
+                {
+                    Query.ExecuteSql(_sSqlString);
+                    MessageBox.Show("User Created!");
+                }
+                catch
+                {
+                    MessageBox.Show("Error!");
+                }
+            }
+
+        }
+
+
+        /// <summary>
+        /// Determines whether input exists, annd if it is of the correct data type
+        /// </summary>
+        /// <returns></returns>
+        private bool ValidInput()
         {
             string sName = UserNametxt.Text;
             string sHeirarchy = Heirarchy.Text;
-            string sPassword = Encryptor.Hash(Passwordtxt.Text);
 
-            string _sSqlString = "INSERT INTO UserID(Name, Hierarchy, HashValue) " + "Values('" + sName + "', '" + sHeirarchy + "', '" + sPassword + "')";
-
-            try
+            if((sName.Length > 0) && (sHeirarchy.Length) > 0 && (Passwordtxt.Text.Length) > 0)
             {
-                Query.ExecuteSql(_sSqlString);
-                MessageBox.Show("User Created!");
+                try
+                {
+                    int Heirarchy = int.Parse(sHeirarchy);
+                    return true;
+                }
+                catch
+                {
+                    MessageBox.Show("Input integer Hierarchy!");
+                    return false;
+                }
             }
-            catch
+            else
             {
-                MessageBox.Show("Error!");
+                MessageBox.Show("Input valid info!");
+                return false;
             }
-
-
-
         }
 
         private void AddUser_Load(object sender, EventArgs e)

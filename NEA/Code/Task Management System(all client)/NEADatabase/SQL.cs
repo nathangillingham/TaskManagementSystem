@@ -17,6 +17,10 @@ namespace NEADatabase
 {
     public class SQL
     {
+
+        /// <summary>
+        /// Ammends database, used for creating fields, entires, doesnt return a value from database
+        /// </summary>
         private string CONNECTION_STRING = @"Provider=Microsoft Jet 4.0 OLE DB Provider; Data Source = UserDatabase.mdb;";
         public void ExecuteSql(string Query)
         {
@@ -43,6 +47,11 @@ namespace NEADatabase
 
         }
 
+        /// <summary>
+        /// Returns values when doing a query, used to retrieve values, not put them in the database
+        /// </summary>
+        /// <param name="Query"></param>
+        /// <returns></returns>
         public OleDbDataReader ExecuteSqlReturn(string Query)
         {
             OleDbConnection connection = new OleDbConnection(CONNECTION_STRING);
